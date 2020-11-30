@@ -1,0 +1,22 @@
+{
+  "name": "carloschininin/util",
+  "description": "Utilities",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Carlos Chininin",
+      "email": "carloschininin@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.3",
+    "symfony/http-foundation": "5.1.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "CarlosChininin\\Util\\": "src/"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
