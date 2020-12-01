@@ -6,15 +6,19 @@ declare(strict_types=1);
 namespace CarlosChininin\Util\File;
 
 
-final class File
+use Symfony\Component\HttpFoundation\File\File;
+
+final class FileDto
 {
     private $name;
     private $path;
+    private $file;
 
-    public function __construct(string $name, string $path)
+    public function __construct(string $name, string $path, ?File $file = null)
     {
         $this->name = $name;
         $this->path = $path;
+        $this->file = $file;
     }
 
     public function name(): string
@@ -25,5 +29,10 @@ final class File
     public function path(): string
     {
         return $this->path;
+    }
+
+    public function file(): ?File
+    {
+        return $this->file;
     }
 }
