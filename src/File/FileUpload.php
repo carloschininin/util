@@ -12,8 +12,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class FileUpload implements Upload
 {
-
-    public function up(array $files, string $filename = null): bool
+    public function up(array $files, string $basePath, string $filename = null): bool
     {
         if (1 !== count($files)) {
             throw new RuntimeException('Not support');
@@ -27,7 +26,7 @@ final class FileUpload implements Upload
         }
 
         try {
-            $fileToUpload->move($file->path(), $file->name());
+            $fileToUpload->move($basePath.$file->path(), $filename ?? $file->name());
         } catch (FileException $exception) {
             return false;
         }

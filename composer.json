@@ -10,7 +10,9 @@
   ],
   "require": {
     "php": "^7.3",
-    "symfony/http-foundation": "5.1.*"
+    "ext-zip": "*",
+    "symfony/http-foundation": "^5.1",
+    "symfony/string": "^5.1"
   },
   "autoload": {
     "psr-4": {

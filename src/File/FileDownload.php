@@ -10,7 +10,7 @@ use RuntimeException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-final class FileDownload implements Download
+class FileDownload implements Download
 {
     public function down(array $files, string $filename = null): Response
     {
@@ -20,8 +20,14 @@ final class FileDownload implements Download
 
         /** @var FileDto $file */
         $file = $files[0];
-        $response = new BinaryFileResponse($file->path());
-        $response->setContentDisposition(Download::DISPOSITION_ATTACHMENT, $filename ?? $file->name());
+
+        return $this->response($filename ?? $file->name(), $file->path());
+    }
+
+    protected function response(string $filename, string $filepath): Response
+    {
+        $response = new BinaryFileResponse($filepath);
+        $response->setContentDisposition(Download::DISPOSITION_ATTACHMENT, $filename);
 
         return $response;
     }
