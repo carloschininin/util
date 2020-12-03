@@ -8,7 +8,7 @@ namespace CarlosChininin\Util\File;
 
 use Symfony\Component\HttpFoundation\Response;
 
-final class FileManager
+final class FileService
 {
     private $targetDirectory;
 
