@@ -2,17 +2,20 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of the PIDIA
+ * (c) Carlos Chininin <cio@pidia.pe>
+ */
 
 namespace CarlosChininin\Util\File;
-
 
 use Symfony\Component\HttpFoundation\File\File;
 
 final class FileDto
 {
-    private $name;
-    private $path;
-    private $file;
+    private string $name;
+    private string $path;
+    private ?File $file;
 
     public function __construct(string $name, string $path, ?File $file = null)
     {

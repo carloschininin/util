@@ -2,26 +2,24 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of the PIDIA
+ * (c) Carlos Chininin <cio@pidia.pe>
+ */
 
 namespace CarlosChininin\Util\File;
-
 
 use Symfony\Component\HttpFoundation\Response;
 
 final class FileService
 {
-    private $targetDirectory;
-
-    public function __construct(string $targetDirectory)
+    public function __construct(private string $targetDirectory)
     {
-        $this->targetDirectory = $targetDirectory;
     }
 
     public function upload(FileDto $fileDto): bool
     {
-        $fileUpload = new FileUpload();
-
-        return $fileUpload->up([$fileDto], $this->targetDirectory());
+        return (new FileUpload())->up([$fileDto], $this->targetDirectory());
     }
 
     public function download(FileDto $fileDto, ?string $fileName = null): Response
@@ -41,13 +39,9 @@ final class FileService
 
     public function remove(FileDto $fileDto): bool
     {
-        $filePath =$this->targetDirectory().$this->filePath($fileDto);
-        if ($this->fileExists($filePath)) {
-            return false;
-        }
+        $filePath = $this->targetDirectory() . $this->filePath($fileDto);
 
-        $this->fileRemove($filePath);
-        return true;
+        return $this->fileRemove($filePath);
     }
 
     public function targetDirectory(): string
@@ -57,7 +51,7 @@ final class FileService
 
     public function filePath(FileDto $fileDto): string
     {
-        return $fileDto->path().$fileDto->name();
+        return $fileDto->path() . $fileDto->name();
     }
 
     private function fileExists(string $filePath): bool
@@ -65,8 +59,12 @@ final class FileService
         return file_exists($filePath);
     }
 
-    private function fileRemove(string $filePath): bool
+    public function fileRemove(string $filePath): bool
     {
+        if ($this->fileExists($filePath)) {
+            return false;
+        }
+
         return unlink($filePath);
     }
 }

@@ -12,12 +12,12 @@
   "require": {
     "php": "^7.4|^8.0",
     "ext-zip": "*",
-    "symfony/http-foundation": "^5.1",
+    "symfony/http-foundation": "^5.2",
     "symfony/string": "^5.2"
   },
   "autoload": {
     "psr-4": {
-      "CarlosChininin\\Util\\": "src/"
+      "CarlosChininin\\Util\\": "."
     }
   },
   "minimum-stability": "dev",
