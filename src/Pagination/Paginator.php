@@ -9,21 +9,96 @@ declare(strict_types=1);
 
 namespace CarlosChininin\Util\Pagination;
 
-use Doctrine\ORM\QueryBuilder;
-use Pagerfanta\Doctrine\ORM\QueryAdapter;
-use Pagerfanta\Pagerfanta;
+use ArrayIterator;
+use Traversable;
 
-final class Paginator
+class Paginator
 {
     public const PAGE_SIZE = 10;
 
-    public static function create(QueryBuilder $query, array $params): Pagerfanta
-    {
-        $paginator = new Pagerfanta(new QueryAdapter($query));
-        $paginator->setMaxPerPage($params['page_size']);
-        $paginator->setCurrentPage($params['page']);
+    protected Traversable $results;
+    protected Traversable $items;
+    protected int $currentPage;
+    protected int $pageSize;
+    protected int $numResults;
 
-        return $paginator;
+    public function __construct($items = [], int $pageSize = self::PAGE_SIZE)
+    {
+        $this->items = $items instanceof Traversable ? $items : new ArrayIterator($items);
+        $this->pageSize = $pageSize;
+    }
+
+    public function paginate(int $page = 1): self
+    {
+        $this->currentPage = max(1, $page);
+        $firstResult = ($this->currentPage - 1) * $this->pageSize();
+        $lastResult = $firstResult + $this->pageSize();
+
+        $paginated = [];
+        $index = 0;
+        $count = 0;
+        foreach ($this->items as $item) {
+            if ($index >= $firstResult && $index < $lastResult) {
+                $paginated[] = $item;
+                ++$count;
+            }
+            ++$index;
+        }
+
+        $this->results = new ArrayIterator($paginated);
+        $this->numResults = $count;
+
+        return $this;
+    }
+
+    public function currentPage(): int
+    {
+        return $this->currentPage;
+    }
+
+    public function pageSize(): int
+    {
+        return $this->pageSize;
+    }
+
+    public function hasPreviousPage(): bool
+    {
+        return $this->currentPage > 1;
+    }
+
+    public function previousPage(): int
+    {
+        return max(1, $this->currentPage - 1);
+    }
+
+    public function hasNextPage(): bool
+    {
+        return $this->currentPage < $this->lastPage();
+    }
+
+    public function lastPage(): int
+    {
+        return (int) ceil($this->numResults / $this->pageSize);
+    }
+
+    public function nextPage(): int
+    {
+        return min($this->lastPage(), $this->currentPage + 1);
+    }
+
+    public function hasToPaginate(): bool
+    {
+        return $this->numResults > $this->pageSize;
+    }
+
+    public function numResults(): int
+    {
+        return $this->numResults;
+    }
+
+    public function results(): Traversable
+    {
+        return $this->results;
     }
 
     public static function params(array $values, int $page = 1): array
@@ -32,25 +107,6 @@ final class Paginator
             'page' => $page,
             'page_size' => (int) (isset($values['n']) && $values['n'] > 0) ? $values['n'] : self::PAGE_SIZE,
             'searching' => isset($values['b']) ? $values['b'] : '',
-            'active' => isset($values['ac']) ? $values['ac'] : '',
         ];
-    }
-
-    public static function queryTexts(QueryBuilder $qb, array $params, array $fields): void
-    {
-        $searching = trim($params['searching']);
-        if ('' !== $searching) {
-            $texts = explode(' ', trim($searching));
-            foreach ($texts as $t) {
-                if ('' !== $t) {
-                    $orX = $qb->expr()->orX();
-                    foreach ($fields as $field) {
-                        $orX->add($qb->expr()->like($field, $qb->expr()->literal('%'.$t.'%')));
-                    }
-
-                    $qb = $qb->andWhere($orX);
-                }
-            }
-        }
     }
 }

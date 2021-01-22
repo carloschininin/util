@@ -29,6 +29,6 @@ function serialNumber(?string $serial, ?string $number, int $numSerial = 3, int 
         return '';
     }
 
-    return str_pad($serial, $numSerial, '0', STR_PAD_LEFT).'-'.
-        str_pad($number, $numNumber, '0', STR_PAD_LEFT);
+    return str_pad($serial, $numSerial, '0', \STR_PAD_LEFT).'-'.
+        str_pad($number, $numNumber, '0', \STR_PAD_LEFT);
 }

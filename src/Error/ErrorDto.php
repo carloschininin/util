@@ -2,15 +2,18 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of the PIDIA
+ * (c) Carlos Chininin <cio@pidia.pe>
+ */
 
 namespace CarlosChininin\Util\Error;
 
-
 final class ErrorDto
 {
-    private $message;
-    private $code;
-    private $detail;
+    private string $message;
+    private int $code;
+    private ?string $detail;
 
     public function __construct(string $message, int $code, ?string $detail = null)
     {

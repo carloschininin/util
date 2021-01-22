@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of the PIDIA
+ * (c) Carlos Chininin <cio@pidia.pe>
+ */
 
 namespace CarlosChininin\Util\File;
 
-
 use Symfony\Component\HttpFoundation\Response;
-
 use Symfony\Component\String\ByteString;
-
-use ZipArchive;
-
 use function Symfony\Component\String\u;
+use ZipArchive;
 
 final class FileZipDownload extends FileDownload
 {

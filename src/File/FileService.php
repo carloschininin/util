@@ -39,7 +39,7 @@ final class FileService
 
     public function remove(FileDto $fileDto): bool
     {
-        $filePath = $this->targetDirectory() . $this->filePath($fileDto);
+        $filePath = $this->targetDirectory().$this->filePath($fileDto);
 
         return $this->fileRemove($filePath);
     }
@@ -51,7 +51,7 @@ final class FileService
 
     public function filePath(FileDto $fileDto): string
     {
-        return $fileDto->path() . $fileDto->name();
+        return $fileDto->path().$fileDto->name();
     }
 
     private function fileExists(string $filePath): bool
