@@ -2,8 +2,12 @@
 
 declare(strict_types=1);
 
-namespace CarlosChininin\Util\Tests;
+/*
+ * This file is part of the PIDIA
+ * (c) Carlos Chininin <cio@pidia.pe>
+ */
 
+namespace CarlosChininin\Util\Tests;
 
 use Faker\Factory;
 
@@ -23,7 +27,8 @@ final class PersonMother
     public static function random(): self
     {
         $faker = Factory::create('es_ES');
-        return new self($faker->name, $faker->numberBetween(10,60));
+
+        return new self($faker->name, $faker->numberBetween(10, 60));
     }
 
     public function name(): string
