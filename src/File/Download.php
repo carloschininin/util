@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the PIDIA
+ * This file is part of the PIDIA.
  * (c) Carlos Chininin <cio@pidia.pe>
  */
 
@@ -16,6 +16,5 @@ interface Download
     public const DISPOSITION_ATTACHMENT = 'attachment';
     public const DISPOSITION_INLINE = 'inline';
 
-    /** @param FileDto | array $files */
-    public function down($files, string $filename = null): Response;
+    public function down(array|FileDto $files, string $filename = null): Response;
 }

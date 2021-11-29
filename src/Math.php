@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the PIDIA
+ * This file is part of the PIDIA.
  * (c) Carlos Chininin <cio@pidia.pe>
  */
 
@@ -16,7 +16,7 @@ function round(?float $value, int $decimal = 2): float
 
 function number(?float $value, int $decimal = 2, bool $comma = true): string
 {
-    if (null === $value || false === is_numeric($value)) {
+    if (false === is_numeric($value)) {
         return '0';
     }
 
@@ -29,7 +29,7 @@ function number(?float $value, int $decimal = 2, bool $comma = true): string
 
 function percentage(?float $value, ?float $total, int $decimal = 2): float
 {
-    if (null === $total || 0 === $total) {
+    if (null === $total) {
         return 0;
     }
 

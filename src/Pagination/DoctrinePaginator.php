@@ -3,73 +3,48 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the PIDIA
+ * This file is part of the PIDIA.
  * (c) Carlos Chininin <cio@pidia.pe>
  */
 
 namespace CarlosChininin\Util\Pagination;
 
+use CarlosChininin\Util\Helper;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\CountWalker;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrineOrmPaginator;
+use Exception;
+use RuntimeException;
 
-final class DoctrinePaginator extends Paginator
+final class DoctrinePaginator implements PaginatorInterface
 {
-    private QueryBuilder $queryBuilder;
-
-    public function __construct(QueryBuilder $queryBuilder, int $pageSize = self::PAGE_SIZE)
+    /**
+     * @param QueryBuilder $data
+     *
+     * @throws Exception
+     */
+    public function paginate(mixed $data, PaginationDto $pagination): PaginatedData
     {
-        $this->queryBuilder = $queryBuilder;
-        parent::__construct([], $pageSize);
-    }
+        if (!$data instanceof QueryBuilder) {
+            throw new RuntimeException('Query no valido');
+        }
 
-    public function paginate(int $page = 1): self
-    {
-        $this->currentPage = max(1, $page);
-        $firstResult = ($this->currentPage - 1) * $this->pageSize;
-
-        $query = $this->queryBuilder
+        $limit = $pagination->limit();
+        $firstResult = ($pagination->page() - 1) * $limit;
+        $query = $data
             ->setFirstResult($firstResult)
-            ->setMaxResults($this->pageSize)
+            ->setMaxResults($limit)
             ->getQuery();
 
-        if (0 === \count($this->queryBuilder->getDQLPart('join'))) {
+        if (0 === \count($data->getDQLPart('join'))) {
             $query->setHint(CountWalker::HINT_DISTINCT, false);
         }
 
         $paginator = new DoctrineOrmPaginator($query, true);
 
-        $useOutputWalkers = \count($this->queryBuilder->getDQLPart('having') ?: []) > 0;
+        $useOutputWalkers = \count($data->getDQLPart('having') ?: []) > 0;
         $paginator->setUseOutputWalkers($useOutputWalkers);
 
-        try {
-            $this->results = $paginator->getIterator();
-        } catch (\Exception $e) {
-            throw new PaginationException();
-        }
-
-        $this->numResults = $paginator->count();
-
-        return $this;
-    }
-
-    public static function queryTexts(QueryBuilder $qb, array $params, array $fields): void
-    {
-        $searching = isset($params['searching']) ? trim($params['searching']) : '';
-        if ('' === $searching) {
-            return;
-        }
-
-        $texts = explode(' ', $searching);
-        foreach ($texts as $t) {
-            if ('' !== $t) {
-                $orX = $qb->expr()->orX();
-                foreach ($fields as $field) {
-                    $orX->add($qb->expr()->like($field, $qb->expr()->literal('%'.$t.'%')));
-                }
-
-                $qb = $qb->andWhere($orX);
-            }
-        }
+        return new PaginatedData(Helper::iterableToArray($paginator->getIterator()), $paginator->count(), $pagination);
     }
 }

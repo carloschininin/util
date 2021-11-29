@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the PIDIA
+ * This file is part of the PIDIA.
  * (c) Carlos Chininin <cio@pidia.pe>
  */
 
@@ -16,7 +16,7 @@ use ZipArchive;
 
 final class FileZipDownload extends FileDownload
 {
-    public function down(array $files, string $filename = null): Response
+    public function down(array|FileDto $files, string $filename = null): Response
     {
         $filename = $this->generateFileName($filename);
         $fileZip = $this->generateZip($files, $filename);

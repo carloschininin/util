@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the PIDIA
+ * This file is part of the PIDIA.
  * (c) Carlos Chininin <cio@pidia.pe>
  */
 
 namespace CarlosChininin\Util\Tests\Pagination;
 
-use CarlosChininin\Util\Pagination\Paginator;
+use CarlosChininin\Util\Pagination\PaginationDto;
 use CarlosChininin\Util\Tests\PersonMother;
 use PHPUnit\Framework\TestCase;
 
@@ -18,20 +18,20 @@ final class PaginationTest extends TestCase
     public function testPaginator(): void
     {
         $data = $this->data(5);
-        $paginator = new Paginator($data, 3);
-        $paginator->paginate(1);
-        $this->assertCount(3, $paginator->results());
+        $paginator = new InMemoryPaginator();
+        $paginationData = $paginator->paginate($data, PaginationDto::create(1, 3));
+        $this->assertCount(3, $paginationData->results());
 
-        $paginator->paginate(2);
-        $result = $paginator->results();
-        $this->assertCount(2, $result);
-        $this->assertSame(2, $paginator->numResults());
-        $this->assertSame($data[3]->name(), $result[0]->name());
-        $this->assertFalse($paginator->hasNextPage());
-        $this->assertTrue($paginator->hasPreviousPage());
+        $paginationData = $paginator->paginate($data, PaginationDto::create(2, 3));
+        $results = $paginationData->results();
+        $this->assertCount(2, $results);
 
-        $paginator->paginate(3);
-        $this->assertEmpty($paginator->results());
+        $this->assertSame($data[3]->name(), $results[0]->name());
+        $this->assertFalse($paginationData->hasNextPage());
+        $this->assertTrue($paginationData->hasPreviousPage());
+
+        $paginationData = $paginator->paginate($data, PaginationDto::create(3, 3));
+        $this->assertEmpty($paginationData->results());
     }
 
     /**

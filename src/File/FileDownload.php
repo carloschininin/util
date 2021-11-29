@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the PIDIA
+ * This file is part of the PIDIA.
  * (c) Carlos Chininin <cio@pidia.pe>
  */
 
@@ -12,12 +12,14 @@ namespace CarlosChininin\Util\File;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
+use function count;
+use function is_array;
 
 class FileDownload implements Download
 {
-    public function down($files, string $filename = null): Response
+    public function down(array|FileDto $files, string $filename = null): Response
     {
-        if (\is_array($files) && 1 !== \count($files)) {
+        if (is_array($files) && 1 !== count($files)) {
             throw new RuntimeException('Not support');
         }
 
