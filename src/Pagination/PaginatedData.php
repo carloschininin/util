@@ -25,6 +25,11 @@ final class PaginatedData
         return $this->count;
     }
 
+    public function numResults(): int
+    {
+        return $this->count();
+    }
+
     public function pagination(): PaginationDto
     {
         return $this->pagination;
