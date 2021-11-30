@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace CarlosChininin\Util\Pagination;
 
+use function count;
+
 final class PaginatedData
 {
     public function __construct(private array $results, private int $count, private PaginationDto $pagination)
@@ -27,7 +29,7 @@ final class PaginatedData
 
     public function numResults(): int
     {
-        return $this->count();
+        return count($this->results());
     }
 
     public function pagination(): PaginationDto
