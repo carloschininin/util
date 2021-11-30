@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace CarlosChininin\Util\Pagination;
 
-final class PaginatedData
+class PaginatedData
 {
     public function __construct(private array $results, private int $count, private PaginationDto $pagination)
     {
@@ -78,5 +78,15 @@ final class PaginatedData
     public function index(int $index): int
     {
         return ($this->currentPage() - 1) * $this->pageSize() + $index;
+    }
+
+    public function startIndex(): int
+    {
+        return ($this->currentPage() - 1) * $this->pageSize() + 1;
+    }
+
+    public function endIndex(): int
+    {
+        return ($this->startIndex() - 1) + $this->numResults();
     }
 }
