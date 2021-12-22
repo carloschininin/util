@@ -13,8 +13,8 @@
     "ext-zip": "*",
     "doctrine/orm": "^2.8",
     "lambdish/phunctional": "^2.1",
-    "symfony/http-foundation": "^5.3",
-    "symfony/string": "^5.3",
+    "symfony/http-foundation": "^5.4|^6.0",
+    "symfony/string": "^5.4|^6.0",
     "webmozart/assert": "^1.10"
   },
   "require-dev": {
