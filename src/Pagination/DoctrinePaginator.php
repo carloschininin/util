@@ -47,4 +47,24 @@ final class DoctrinePaginator implements PaginatorInterface
 
         return new PaginatedData(Helper::iterableToArray($paginator->getIterator()), $paginator->count(), $pagination);
     }
+
+    public static function queryTexts(QueryBuilder $qb, array $params, array $fields): void
+    {
+        $searching = isset($params['searching']) ? trim($params['searching']) : '';
+        if ('' === $searching) {
+            return;
+        }
+
+        $texts = explode(' ', $searching);
+        foreach ($texts as $t) {
+            if ('' !== $t) {
+                $orX = $qb->expr()->orX();
+                foreach ($fields as $field) {
+                    $orX->add($qb->expr()->like($field, $qb->expr()->literal('%'.$t.'%')));
+                }
+
+                $qb = $qb->andWhere($orX);
+            }
+        }
+    }
 }
