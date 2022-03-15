@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace CarlosChininin\Util\Pagination;
 
 use CarlosChininin\Util\Helper;
+use CarlosChininin\Util\Http\ParamFetcher;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\CountWalker;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrineOrmPaginator;
@@ -48,22 +49,27 @@ final class DoctrinePaginator implements PaginatorInterface
         return new PaginatedData(Helper::iterableToArray($paginator->getIterator()), $paginator->count(), $pagination);
     }
 
-    public static function queryTexts(QueryBuilder $qb, array $params, array $fields): void
+    public static function queryTexts(QueryBuilder $query, array|ParamFetcher $params, array $fields): void
     {
-        $searching = isset($params['searching']) ? trim($params['searching']) : '';
-        if ('' === $searching) {
+        if ($params instanceof ParamFetcher) {
+            $searching = $params->getNullableString('searching');
+        } else {
+            $searching = $params['searching'] ?? null;
+        }
+
+        if (null === $searching) {
             return;
         }
 
-        $texts = explode(' ', $searching);
-        foreach ($texts as $t) {
-            if ('' !== $t) {
-                $orX = $qb->expr()->orX();
+        $texts = explode(' ', trim($searching));
+        foreach ($texts as $text) {
+            if ('' !== $text) {
+                $orX = $query->expr()->orX();
                 foreach ($fields as $field) {
-                    $orX->add($qb->expr()->like($field, $qb->expr()->literal('%'.$t.'%')));
+                    $orX->add($query->expr()->like($field, $query->expr()->literal('%'.$text.'%')));
                 }
 
-                $qb = $qb->andWhere($orX);
+                $query = $query->andWhere($orX);
             }
         }
     }
