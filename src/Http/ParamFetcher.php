@@ -13,7 +13,6 @@ use CarlosChininin\Util\Helper;
 use CarlosChininin\Util\Validator\Assert;
 use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Request;
-use function in_array;
 
 final class ParamFetcher
 {
@@ -121,7 +120,7 @@ final class ParamFetcher
 
     private function assertType(string $key, string $type): void
     {
-        if (!$this->testScalarType && in_array($type, self::SCALAR_TYPES, true)) {
+        if (!$this->testScalarType && \in_array($type, self::SCALAR_TYPES, true)) {
             return;
         }
 
@@ -138,5 +137,10 @@ final class ParamFetcher
                 Assert::dateTimeString($this->data[$key], Helper::DATE_FORMAT, sprintf('"%s" should be a valid format "%s" date', $key, Helper::DATE_FORMAT));
                 break;
         }
+    }
+
+    public function add(string $key, mixed $value): void
+    {
+        $this->data[$key] = $value;
     }
 }
