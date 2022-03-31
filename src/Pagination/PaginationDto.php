@@ -50,11 +50,11 @@ final class PaginationDto
 
     public function limit(): int
     {
-        return $this->limit;
+        return $this->limit > 0 ? $this->limit : self::DEFAULT_LIMIT;
     }
 
     public function page(): int
     {
-        return $this->page;
+        return $this->page > 0 ? $this->page : self::DEFAULT_PAGE;
     }
 }
