@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace CarlosChininin\Util\Filter;
 
+use CarlosChininin\Util\Http\ParamFetcher;
 use Doctrine\ORM\QueryBuilder;
 
 class DoctrineValueSearch extends ValueSearch
@@ -43,5 +44,12 @@ class DoctrineValueSearch extends ValueSearch
         }
 
         (new self($textSearch))->text($queryBuilder, $fields, $connector);
+    }
+
+    public static function byParams(QueryBuilder $queryBuilder, ParamFetcher $params, array $fields, string $connector = self::CONNECTOR_OR): void
+    {
+        $textSearch = $params->getNullableString('searching') ?? $params->getNullableString('b');
+
+        self::apply($queryBuilder, $textSearch, $fields, $connector);
     }
 }
