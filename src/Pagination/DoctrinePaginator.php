@@ -49,14 +49,8 @@ final class DoctrinePaginator implements PaginatorInterface
         return new PaginatedData(Helper::iterableToArray($paginator->getIterator()), $paginator->count(), $pagination);
     }
 
-    public static function queryTexts(QueryBuilder $query, array|ParamFetcher $params, array $fields): void
+    public static function filterText(QueryBuilder $query, ?string $searching, array $fields): void
     {
-        if ($params instanceof ParamFetcher) {
-            $searching = $params->getNullableString('searching');
-        } else {
-            $searching = $params['searching'] ?? null;
-        }
-
         if (null === $searching) {
             return;
         }
@@ -72,5 +66,16 @@ final class DoctrinePaginator implements PaginatorInterface
                 $query = $query->andWhere($orX);
             }
         }
+    }
+
+    public static function queryTexts(QueryBuilder $query, array|ParamFetcher $params, array $fields): void
+    {
+        if ($params instanceof ParamFetcher) {
+            $searching = $params->getNullableString('searching');
+        } else {
+            $searching = $params['searching'] ?? null;
+        }
+
+        self::filterText($query, $searching, $fields);
     }
 }

@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace CarlosChininin\Util\Error;
 
-final class Error
+class Error
 {
     private string $message;
     private int $code;
