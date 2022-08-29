@@ -80,6 +80,11 @@ class PaginatedData
         return ($this->currentPage() - 1) * $this->pageSize() + $index;
     }
 
+    public function indexReversed(int $index): int
+    {
+        return $this->count() - $this->index($index) + 1;
+    }
+
     public function startIndex(): int
     {
         return ($this->currentPage() - 1) * $this->pageSize() + 1;
