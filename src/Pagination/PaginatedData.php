@@ -11,8 +11,11 @@ namespace CarlosChininin\Util\Pagination;
 
 class PaginatedData
 {
-    public function __construct(private array $results, private int $count, private PaginationDto $pagination)
-    {
+    public function __construct(
+        private readonly array $results,
+        private readonly int $count,
+        private readonly PaginationDto $pagination
+    ) {
     }
 
     public function results(): array

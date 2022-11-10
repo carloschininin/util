@@ -46,7 +46,10 @@ final class DoctrinePaginator implements PaginatorInterface
         $useOutputWalkers = \count($data->getDQLPart('having') ?: []) > 0;
         $paginator->setUseOutputWalkers($useOutputWalkers);
 
-        return new PaginatedData(Helper::iterableToArray($paginator->getIterator()), $paginator->count(), $pagination);
+        $numResults = $paginator->count();
+        $results = Helper::iterableToArray($paginator->getIterator());
+
+        return new PaginatedData($results, $numResults, $pagination);
     }
 
     public static function filterText(QueryBuilder $query, ?string $searching, array $fields): void
