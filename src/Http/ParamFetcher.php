@@ -143,4 +143,9 @@ final class ParamFetcher
     {
         $this->data[$key] = $value;
     }
+
+    public function get(string $key): mixed
+    {
+        return $this->data[$key];
+    }
 }
