@@ -146,6 +146,6 @@ final class ParamFetcher
 
     public function get(string $key): mixed
     {
-        return $this->data[$key];
+        return $this->data[$key] ?? null;
     }
 }
