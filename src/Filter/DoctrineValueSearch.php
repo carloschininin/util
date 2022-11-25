@@ -21,7 +21,11 @@ class DoctrineValueSearch extends ValueSearch
         }
 
         $expression = $queryBuilder->expr();
-        $separedWords = explode(' ', trim($this->searchText()));
+        if (preg_match('/"([^"]+)"/', $this->searchText(), $resultTexts)) {
+            $separedWords[] = $resultTexts[1] ?? $resultTexts[0];
+        } else {
+            $separedWords = explode(' ', $this->searchText());
+        }
 
         $connectorQuery = self::CONNECTOR_OR === $connector ? $expression->orX() : $expression->andX();
         foreach ($separedWords as $word) {

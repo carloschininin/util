@@ -14,8 +14,11 @@ class ValueSearch
     public const CONNECTOR_OR = 'OR';
     public const CONNECTOR_AND = 'AND';
 
-    public function __construct(private ?string $searchText = null)
+    private ?string $searchText;
+
+    public function __construct(?string $searchText = null)
     {
+        $this->searchText = $searchText ? trim($searchText) : null;
     }
 
     public function searchText(): ?string
