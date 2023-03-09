@@ -39,6 +39,11 @@ final class ParamFetcher
         $this->testScalarType = $testScalarType;
     }
 
+    public static function create(array $data, bool $testScalarType = true): self
+    {
+        return new self($data, $testScalarType);
+    }
+
     public static function fromRequestAttributes(Request $request): self
     {
         return new self($request->attributes->all(), false);
@@ -52,6 +57,16 @@ final class ParamFetcher
     public static function fromRequestQuery(Request $request): self
     {
         return new self($request->query->all(), false);
+    }
+
+    public static function fromRequestApi(Request $request): self
+    {
+        if (0 === mb_strpos($request->headers->get('Content-Type'), 'application/json')) {
+            $content = json_decode($request->getContent(), true);
+            $request->request->replace(\is_array($content) ? $content : []);
+        }
+
+        return self::fromRequestBody($request);
     }
 
     public function getRequiredString(string $key): string
