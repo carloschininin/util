@@ -9,18 +9,9 @@ declare(strict_types=1);
 
 namespace CarlosChininin\Util;
 
-use DateTime;
-use DateTimeImmutable;
-use DateTimeInterface;
-use Exception;
-use const JSON_ERROR_NONE;
 use function Lambdish\Phunctional\filter;
-use ReflectionClass;
-use RuntimeException;
-use const STR_PAD_LEFT;
-use Traversable;
 
-final class Helper
+class Helper
 {
     public const DATE_FORMAT = 'd-m-Y';
 
@@ -34,14 +25,14 @@ final class Helper
         return mb_substr($haystack, -$length) === $needle;
     }
 
-    public static function dateToString(DateTimeInterface $date): string
+    public static function dateToString(\DateTimeInterface $date): string
     {
-        return $date->format(DateTimeInterface::ATOM);
+        return $date->format(\DateTimeInterface::ATOM);
     }
 
-    public static function stringToDate(string $date): DateTimeImmutable
+    public static function stringToDate(string $date): \DateTimeImmutable
     {
-        return new DateTimeImmutable($date);
+        return new \DateTimeImmutable($date);
     }
 
     public static function jsonEncode(array $values): string
@@ -53,8 +44,8 @@ final class Helper
     {
         $data = json_decode($json, true);
 
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new RuntimeException('Unable to parse response body into JSON: '.json_last_error());
+        if (\JSON_ERROR_NONE !== json_last_error()) {
+            throw new \RuntimeException('Unable to parse response body into JSON: '.json_last_error());
         }
 
         return $data;
@@ -94,17 +85,13 @@ final class Helper
 
     public static function extractClassName(object $object): string
     {
-        $reflect = new ReflectionClass($object);
+        $reflect = new \ReflectionClass($object);
 
         return $reflect->getShortName();
     }
 
-    public static function iterableToArray(Traversable $iterable): array
+    public static function iterableToArray(\Traversable $iterable): array
     {
-        if (\is_array($iterable)) {
-            return $iterable;
-        }
-
         return iterator_to_array($iterable);
     }
 
@@ -114,18 +101,18 @@ final class Helper
             return '';
         }
 
-        return str_pad((string) $dni, 8, '0', STR_PAD_LEFT);
+        return mb_str_pad((string) $dni, 8, '0', \STR_PAD_LEFT);
     }
 
-    public static function fecha(string|int|null $fecha): ?DateTimeInterface
+    public static function fecha(string|int|null $fecha): ?\DateTimeInterface
     {
         if (null === $fecha) {
             return null;
         }
 
         try {
-            return new DateTime((string) $fecha);
-        } catch (Exception) {
+            return new \DateTime((string) $fecha);
+        } catch (\Exception) {
         }
 
         return null;
@@ -152,7 +139,7 @@ final class Helper
             return null;
         }
 
-        return str_pad((string) $number, $numDigits, '0', STR_PAD_LEFT);
+        return mb_str_pad((string) $number, $numDigits, '0', \STR_PAD_LEFT);
     }
 
     public static function cleanUpperText(mixed $text, array $cleanValues = [',', ' ', ';', '.']): ?string

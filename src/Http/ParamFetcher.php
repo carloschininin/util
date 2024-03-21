@@ -11,7 +11,6 @@ namespace CarlosChininin\Util\Http;
 
 use CarlosChininin\Util\Helper;
 use CarlosChininin\Util\Validator\Assert;
-use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Request;
 
 final class ParamFetcher
@@ -20,7 +19,7 @@ final class ParamFetcher
     private const TYPE_INT = 'int';
     private const TYPE_DATE = 'date';
 
-    //TODO: need to add rest of scalar types
+    // TODO: need to add rest of scalar types
     private const SCALAR_TYPES = [self::TYPE_STRING, self::TYPE_INT];
 
     /**
@@ -105,27 +104,23 @@ final class ParamFetcher
         return (int) $this->data[$key];
     }
 
-    public function getRequiredDate(string $key): DateTimeImmutable
+    public function getRequiredDate(string $key, ?string $format = null): \DateTimeImmutable
     {
         $this->assertRequired($key);
-        $this->assertType($key, self::TYPE_DATE);
+        $this->assertType($key, self::TYPE_DATE, $format);
 
-        return new DateTimeImmutable($this->data[$key]);
+        return new \DateTimeImmutable($this->data[$key]);
     }
 
-    public function getNullableDate(string $key): ?DateTimeImmutable
+    public function getNullableDate(string $key, ?string $format = null): ?\DateTimeImmutable
     {
         if (!isset($this->data[$key]) || '' === $this->data[$key]) {
             return null;
         }
-        $this->assertType($key, self::TYPE_DATE);
+        $this->assertType($key, self::TYPE_DATE, $format);
 
-        return new DateTimeImmutable($this->data[$key]);
+        return new \DateTimeImmutable($this->data[$key]);
     }
-
-    // .....
-    // TODO:  Add additional required methods for every scalar type
-    // .....
 
     private function assertRequired(string $key): void
     {
@@ -133,25 +128,17 @@ final class ParamFetcher
         Assert::notNull($this->data[$key], sprintf('"%s" should be not null', $key));
     }
 
-    private function assertType(string $key, string $type): void
+    private function assertType(string $key, string $type, ?string $format = null): void
     {
         if (!$this->testScalarType && \in_array($type, self::SCALAR_TYPES, true)) {
             return;
         }
 
-        switch ($type) {
-            case self::TYPE_STRING:
-                Assert::string($this->data[$key], sprintf('"%s" should be a string. Got %%s', $key));
-                break;
-
-            case self::TYPE_INT:
-                Assert::string($this->data[$key], sprintf('"%s" should be an integer. Got %%s', $key));
-                break;
-
-            case self::TYPE_DATE:
-                Assert::dateTimeString($this->data[$key], Helper::DATE_FORMAT, sprintf('"%s" should be a valid format "%s" date', $key, Helper::DATE_FORMAT));
-                break;
-        }
+        match ($type) {
+            self::TYPE_STRING => Assert::string($this->data[$key], sprintf('"%s" should be a string. Got %%s', $key)),
+            self::TYPE_INT => Assert::string($this->data[$key], sprintf('"%s" should be an integer. Got %%s', $key)),
+            self::TYPE_DATE => Assert::dateTimeString($this->data[$key], $format ?? Helper::DATE_FORMAT, sprintf('"%s" should be a valid format "%s" date', $key, $format ?? Helper::DATE_FORMAT)),
+        };
     }
 
     public function add(string $key, mixed $value): void
