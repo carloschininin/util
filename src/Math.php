@@ -9,8 +9,6 @@ declare(strict_types=1);
 
 namespace CarlosChininin\Util;
 
-use DivisionByZeroError;
-
 class Math
 {
     public static function round(?float $value, int $decimal = 2, $mode = \PHP_ROUND_HALF_UP): float
@@ -39,7 +37,7 @@ class Math
 
         try {
             return round(100 * $value / $total, $decimal, \PHP_ROUND_HALF_DOWN);
-        } catch (DivisionByZeroError) {
+        } catch (\DivisionByZeroError) {
         }
 
         return 0;
