@@ -11,7 +11,7 @@ namespace CarlosChininin\Util\Pagination;
 
 use RuntimeException;
 
-final class PaginationException extends RuntimeException
+class PaginationException extends RuntimeException
 {
     public function __construct($message = 'Pagination')
     {

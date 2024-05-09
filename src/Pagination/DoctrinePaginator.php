@@ -17,10 +17,14 @@ use Doctrine\ORM\Tools\Pagination\Paginator as DoctrineOrmPaginator;
 use Exception;
 use RuntimeException;
 
+/**
+ * @template T of object
+ */
 final class DoctrinePaginator implements PaginatorInterface
 {
     /**
      * @param QueryBuilder $data
+     * @return PaginatedData<T>
      *
      * @throws Exception
      */

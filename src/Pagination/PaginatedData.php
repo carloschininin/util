@@ -9,6 +9,9 @@ declare(strict_types=1);
 
 namespace CarlosChininin\Util\Pagination;
 
+/**
+ * @template T of object
+ */
 class PaginatedData
 {
     public function __construct(
@@ -18,6 +21,9 @@ class PaginatedData
     ) {
     }
 
+    /**
+     * @return iterable<T>|array
+     */
     public function results(): array
     {
         return $this->results;
