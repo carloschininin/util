@@ -14,8 +14,6 @@ use CarlosChininin\Util\Http\ParamFetcher;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\CountWalker;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrineOrmPaginator;
-use Exception;
-use RuntimeException;
 
 /**
  * @template T of object
@@ -24,14 +22,15 @@ final class DoctrinePaginator implements PaginatorInterface
 {
     /**
      * @param QueryBuilder $data
-     * @return PaginatedData<T>
      *
-     * @throws Exception
+     * @throws \Exception
+     *
+     * @return PaginatedData<T>
      */
     public function paginate(mixed $data, PaginationDto $pagination): PaginatedData
     {
         if (!$data instanceof QueryBuilder) {
-            throw new RuntimeException('Query no valido');
+            throw new \RuntimeException('Query no valido');
         }
 
         $limit = $pagination->limit();
@@ -45,10 +44,11 @@ final class DoctrinePaginator implements PaginatorInterface
             $query->setHint(CountWalker::HINT_DISTINCT, false);
         }
 
-        $paginator = new DoctrineOrmPaginator($query, true);
+        $isSimple = !$this->isComplexDQL($data->getDQL());
+        $paginator = new DoctrineOrmPaginator($query, $isSimple);
 
         $useOutputWalkers = \count($data->getDQLPart('having') ?: []) > 0;
-        $paginator->setUseOutputWalkers($useOutputWalkers);
+        $paginator->setUseOutputWalkers($isSimple ? $useOutputWalkers : null);
 
         $numResults = $paginator->count();
         $results = Helper::iterableToArray($paginator->getIterator());
@@ -73,6 +73,22 @@ final class DoctrinePaginator implements PaginatorInterface
                 $query = $query->andWhere($orX);
             }
         }
+    }
+
+    private function isComplexDQL(string $dql): bool
+    {
+        $dql = preg_replace('/\s+/', ' ', $dql);
+        if (preg_match('/\bSELECT\b\s+(.*?)\bFROM\b/i', $dql, $matches)) {
+            $selectClause = trim($matches[1]);
+            if (preg_match('/^\w+$/', $selectClause)) {
+                return false;
+            }
+            if (preg_match('/\b\w+\.\w+\b|\bSUM\b|\bCOUNT\b|\bMAX\b|\bMIN\b/', $selectClause)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static function queryTexts(QueryBuilder $query, array|ParamFetcher $params, array $fields): void
