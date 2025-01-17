@@ -44,7 +44,10 @@ final class DoctrinePaginator implements PaginatorInterface
             $query->setHint(CountWalker::HINT_DISTINCT, false);
         }
 
-        $isSimple = !$evaluate || $this->isComplexDQL($data->getDQL());
+        $isSimple = true;
+        if ($evaluate) {
+            $isSimple = !$this->isComplexDQL($data->getDQL());
+        }
         $paginator = new DoctrineOrmPaginator($query, $isSimple);
 
         $useOutputWalkers = \count($data->getDQLPart('having') ?: []) > 0;
