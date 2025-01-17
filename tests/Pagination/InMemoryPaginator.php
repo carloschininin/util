@@ -15,7 +15,7 @@ use CarlosChininin\Util\Pagination\PaginatorInterface;
 
 final class InMemoryPaginator implements PaginatorInterface
 {
-    public function paginate(mixed $data, PaginationDto $pagination): PaginatedData
+    public function paginate(mixed $data, PaginationDto $pagination, bool $evaluate = false): PaginatedData
     {
         $currentPage = max(1, $pagination->page());
         $firstResult = ($currentPage - 1) * $pagination->limit();

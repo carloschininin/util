@@ -27,7 +27,7 @@ final class DoctrinePaginator implements PaginatorInterface
      *
      * @return PaginatedData<T>
      */
-    public function paginate(mixed $data, PaginationDto $pagination): PaginatedData
+    public function paginate(mixed $data, PaginationDto $pagination, bool $evaluate = false): PaginatedData
     {
         if (!$data instanceof QueryBuilder) {
             throw new \RuntimeException('Query no valido');
@@ -44,7 +44,7 @@ final class DoctrinePaginator implements PaginatorInterface
             $query->setHint(CountWalker::HINT_DISTINCT, false);
         }
 
-        $isSimple = !$this->isComplexDQL($data->getDQL());
+        $isSimple = !$evaluate || $this->isComplexDQL($data->getDQL());
         $paginator = new DoctrineOrmPaginator($query, $isSimple);
 
         $useOutputWalkers = \count($data->getDQLPart('having') ?: []) > 0;

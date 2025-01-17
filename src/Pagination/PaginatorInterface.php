@@ -11,5 +11,5 @@ namespace CarlosChininin\Util\Pagination;
 
 interface PaginatorInterface
 {
-    public function paginate(mixed $data, PaginationDto $pagination): PaginatedData;
+    public function paginate(mixed $data, PaginationDto $pagination, bool $evaluate = false): PaginatedData;
 }
