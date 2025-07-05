@@ -18,9 +18,8 @@ final class ParamFetcher
     private const TYPE_STRING = 'string';
     private const TYPE_INT = 'int';
     private const TYPE_DATE = 'date';
-
-    // TODO: need to add rest of scalar types
-    private const SCALAR_TYPES = [self::TYPE_STRING, self::TYPE_INT];
+    private const TYPE_BOOL = 'bool';
+    private const SCALAR_TYPES = [self::TYPE_STRING, self::TYPE_INT, self::TYPE_BOOL];
 
     /**
      * @var array<string, mixed>
@@ -104,6 +103,27 @@ final class ParamFetcher
         return (int) $this->data[$key];
     }
 
+    public function getRequiredBool(string $key): bool
+    {
+        $this->assertRequired($key);
+        $this->assertType($key, self::TYPE_BOOL);
+
+        return (bool) $this->data[$key];
+    }
+
+    public function getNullableBool(string $key): ?bool
+    {
+        if (!isset($this->data[$key]) || '' === $this->data[$key]) {
+            return null;
+        }
+        $this->assertType($key, self::TYPE_BOOL);
+
+        return (bool) $this->data[$key];
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function getRequiredDate(string $key, ?string $format = null): \DateTimeImmutable
     {
         $this->assertRequired($key);
@@ -112,6 +132,9 @@ final class ParamFetcher
         return new \DateTimeImmutable($this->data[$key]);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function getNullableDate(string $key, ?string $format = null): ?\DateTimeImmutable
     {
         if (!isset($this->data[$key]) || '' === $this->data[$key]) {
@@ -137,6 +160,7 @@ final class ParamFetcher
         match ($type) {
             self::TYPE_STRING => Assert::string($this->data[$key], sprintf('"%s" should be a string. Got %%s', $key)),
             self::TYPE_INT => Assert::string($this->data[$key], sprintf('"%s" should be an integer. Got %%s', $key)),
+            self::TYPE_BOOL => Assert::boolean($this->data[$key], sprintf('"%s" should be a boolean. Got %%s', $key)),
             self::TYPE_DATE => Assert::dateTimeString($this->data[$key], $format ?? Helper::DATE_FORMAT, sprintf('"%s" should be a valid format "%s" date', $key, $format ?? Helper::DATE_FORMAT)),
         };
     }
