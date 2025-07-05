@@ -14,10 +14,11 @@
   "require": {
     "php": "^8.3",
     "ext-zip": "*",
-    "doctrine/orm": "^3.0",
+    "ext-mbstring": "*",
+    "doctrine/orm": "^2.0|^3.0",
     "lambdish/phunctional": "^2.1",
-    "symfony/http-foundation": "^7.0",
-    "symfony/string": "^7.0",
+    "symfony/http-foundation": "^6.0|^7.0",
+    "symfony/string": "^6.0|^7.0",
     "webmozart/assert": "^1.10"
   },
   "require-dev": {
@@ -38,5 +39,8 @@
     "psr-4": {
       "CarlosChininin\\Util\\Tests\\": "tests/"
     }
+  },
+  "suggest": {
+    "ext-bcmath": "PHP Extensión de Matemáticas de precisión arbitraria"
   }
 }

@@ -11,9 +11,31 @@ namespace CarlosChininin\Util;
 
 class Math
 {
+    private const PHP_VERSION_BCROUND = '8.4.0';
+
     public static function round(?float $value, int $decimal = 2, $mode = \PHP_ROUND_HALF_UP): float
     {
         return round($value, $decimal, $mode);
+    }
+
+    public static function roundMath(float $value, int $decimal): float
+    {
+        if (self::hasBcroundNative()) {
+            return (float) bcround((string) $value, $decimal);
+        }
+
+        if (self::hasBcmath()) {
+            $multiplier = bcpow('10', (string) $decimal);
+            $multiplied = bcmul((string) $value, $multiplier, $decimal + 2);
+
+            return (float) bcdiv(
+                bcadd($multiplied, '0.5', 0),
+                $multiplier,
+                $decimal
+            );
+        }
+
+        return round($value, $decimal);
     }
 
     public static function number(?float $value, int $decimal = 2, bool $comma = true): string
@@ -41,5 +63,18 @@ class Math
         }
 
         return 0;
+    }
+
+    private static function hasBcroundNative(): bool
+    {
+        return version_compare(PHP_VERSION, self::PHP_VERSION_BCROUND, '>=')
+            && extension_loaded('bcmath')
+            && function_exists('bcround');
+    }
+
+    private static function hasBcmath(): bool
+    {
+        return extension_loaded('bcmath')
+            && function_exists('bcpow');
     }
 }

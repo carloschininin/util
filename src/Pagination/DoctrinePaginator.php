@@ -65,7 +65,7 @@ final class DoctrinePaginator implements PaginatorInterface
             return;
         }
 
-        $texts = explode(' ', trim($searching));
+        $texts = explode(' ', mb_trim($searching));
         foreach ($texts as $text) {
             if ('' !== $text) {
                 $orX = $query->expr()->orX();
@@ -82,7 +82,7 @@ final class DoctrinePaginator implements PaginatorInterface
     {
         $dql = preg_replace('/\s+/', ' ', $dql);
         if (preg_match('/\bSELECT\b\s+(.*?)\bFROM\b/i', $dql, $matches)) {
-            $selectClause = trim($matches[1]);
+            $selectClause = mb_trim($matches[1]);
             if (preg_match('/^\w+$/', $selectClause)) {
                 return false;
             }
