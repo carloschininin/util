@@ -61,7 +61,7 @@ class Helper
 
     public static function toCamelCase(string $text): string
     {
-        return lcfirst(str_replace('_', '', ucwords($text, '_')));
+        return lcfirst(str_replace(['_', ' '], '', ucwords($text, '_ ')));
     }
 
     public static function dot(array $array, string $prepend = ''): array
