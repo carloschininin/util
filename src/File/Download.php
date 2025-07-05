@@ -16,5 +16,5 @@ interface Download
     public const DISPOSITION_ATTACHMENT = 'attachment';
     public const DISPOSITION_INLINE = 'inline';
 
-    public function down(array|FileDto $files, string $filename = null): Response;
+    public function down(array|FileDto $files, ?string $filename = null): Response;
 }

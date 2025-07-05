@@ -30,6 +30,9 @@ class Helper
         return $date->format(\DateTimeInterface::ATOM);
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function stringToDate(string $date): \DateTimeImmutable
     {
         return new \DateTimeImmutable($date);

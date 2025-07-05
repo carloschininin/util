@@ -17,7 +17,7 @@ class PaginatedData
     public function __construct(
         private readonly array $results,
         private readonly int $count,
-        private readonly PaginationDto $pagination
+        private readonly PaginationDto $pagination,
     ) {
     }
 

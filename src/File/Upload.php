@@ -12,5 +12,5 @@ namespace CarlosChininin\Util\File;
 interface Upload
 {
     /** @param FileDto[] $files */
-    public function up(array $files, string $basePath, string $filename = null): bool;
+    public function up(array $files, string $basePath, ?string $filename = null): bool;
 }

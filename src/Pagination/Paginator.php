@@ -9,23 +9,20 @@ declare(strict_types=1);
 
 namespace CarlosChininin\Util\Pagination;
 
-use ArrayIterator;
-use Traversable;
-
 /** @deprecated Use class PaginatedData and DoctrinePaginator */
 final class Paginator
 {
     public const PAGE_SIZE = 10;
 
-    private Traversable $results;
-    private Traversable $items;
+    private \Traversable $results;
+    private \Traversable $items;
     private int $currentPage;
     private int $pageSize;
     private int $numResults;
 
     public function __construct(mixed $items = [], int $pageSize = self::PAGE_SIZE)
     {
-        $this->items = $items instanceof Traversable ? $items : new ArrayIterator($items);
+        $this->items = $items instanceof \Traversable ? $items : new \ArrayIterator($items);
         $this->pageSize = $pageSize;
     }
 
@@ -46,7 +43,7 @@ final class Paginator
             ++$index;
         }
 
-        $this->results = new ArrayIterator($paginated);
+        $this->results = new \ArrayIterator($paginated);
         $this->numResults = $count;
 
         return $this;
@@ -97,7 +94,7 @@ final class Paginator
         return $this->numResults;
     }
 
-    public function results(): Traversable
+    public function results(): \Traversable
     {
         return $this->results;
     }

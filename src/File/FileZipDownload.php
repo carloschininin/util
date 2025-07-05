@@ -11,12 +11,12 @@ namespace CarlosChininin\Util\File;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\String\ByteString;
-use function Symfony\Component\String\u;
 use ZipArchive;
+use function Symfony\Component\String\u;
 
 final class FileZipDownload extends FileDownload
 {
-    public function down(array|FileDto $files, string $filename = null): Response
+    public function down(array|FileDto $files, ?string $filename = null): Response
     {
         $filename = $this->generateFileName($filename);
         $fileZip = $this->generateZip($files, $filename);
@@ -39,15 +39,15 @@ final class FileZipDownload extends FileDownload
 
     private function generateZip(array $files, string $filename): FileDto
     {
-        $zip = new ZipArchive();
+        $zip = new \ZipArchive();
         $tempFilename = tempnam(sys_get_temp_dir(), $filename);
 
-        if (true === $zip->open($tempFilename)) { //, ZIPARCHIVE::CREATE
+        if (true === $zip->open($tempFilename)) { // , ZIPARCHIVE::CREATE
             $tempFiles = [];
             foreach ($files as $file) {
                 $path = realpath($file->path());
                 if (file_exists($path)) {
-                    $newFile = (string) sys_get_temp_dir().'/'.$file->name();
+                    $newFile = sys_get_temp_dir().'/'.$file->name();
                     copy($path, $newFile);
                     $zip->addFile($newFile, $file->name());
                     $tempFiles[] = $newFile;

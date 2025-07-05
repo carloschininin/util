@@ -9,18 +9,15 @@ declare(strict_types=1);
 
 namespace CarlosChininin\Util\File;
 
-use RuntimeException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
-use function count;
-use function is_array;
 
 class FileDownload implements Download
 {
-    public function down(array|FileDto $files, string $filename = null): Response
+    public function down(array|FileDto $files, ?string $filename = null): Response
     {
-        if (is_array($files) && 1 !== count($files)) {
-            throw new RuntimeException('Not support');
+        if (\is_array($files) && 1 !== \count($files)) {
+            throw new \RuntimeException('Not support');
         }
 
         $file = $files instanceof FileDto ? $files : $files[0];

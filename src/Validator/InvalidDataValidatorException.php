@@ -9,8 +9,6 @@ declare(strict_types=1);
 
 namespace CarlosChininin\Util\Validator;
 
-use RuntimeException;
-
-class InvalidDataValidatorException extends RuntimeException
+class InvalidDataValidatorException extends \RuntimeException
 {
 }

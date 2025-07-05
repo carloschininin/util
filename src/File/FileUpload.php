@@ -9,15 +9,14 @@ declare(strict_types=1);
 
 namespace CarlosChininin\Util\File;
 
-use RuntimeException;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 final class FileUpload implements Upload
 {
-    public function up(array $files, string $basePath, string $filename = null): bool
+    public function up(array $files, string $basePath, ?string $filename = null): bool
     {
         if (1 !== \count($files)) {
-            throw new RuntimeException('Not support');
+            throw new \RuntimeException('Not support');
         }
 
         /** @var FileDto $file */

@@ -9,9 +9,7 @@ declare(strict_types=1);
 
 namespace CarlosChininin\Util\Pagination;
 
-use RuntimeException;
-
-class PaginationException extends RuntimeException
+class PaginationException extends \RuntimeException
 {
     public function __construct($message = 'Pagination')
     {
