@@ -159,7 +159,7 @@ final class ParamFetcher
 
         match ($type) {
             self::TYPE_STRING => Assert::string($this->data[$key], sprintf('"%s" should be a string. Got %%s', $key)),
-            self::TYPE_INT => Assert::string($this->data[$key], sprintf('"%s" should be an integer. Got %%s', $key)),
+            self::TYPE_INT => Assert::numeric($this->data[$key], sprintf('"%s" should be an integer. Got %%s', $key)),
             self::TYPE_BOOL => Assert::boolean($this->data[$key], sprintf('"%s" should be a boolean. Got %%s', $key)),
             self::TYPE_DATE => Assert::dateTimeString($this->data[$key], $format ?? Helper::DATE_FORMAT, sprintf('"%s" should be a valid format "%s" date', $key, $format ?? Helper::DATE_FORMAT)),
         };
