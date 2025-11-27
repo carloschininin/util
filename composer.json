@@ -12,13 +12,13 @@
     }
   ],
   "require": {
-    "php": "^8.3",
+    "php": "^8.4",
     "ext-zip": "*",
     "ext-mbstring": "*",
     "doctrine/orm": "^2.0|^3.0",
     "lambdish/phunctional": "^2.1",
-    "symfony/http-foundation": "^6.0|^7.0",
-    "symfony/string": "^6.0|^7.0",
+    "symfony/http-foundation": "^6.0|^7.0|^8.0",
+    "symfony/string": "^6.0|^7.0|^8.0",
     "webmozart/assert": "^1.10"
   },
   "require-dev": {
