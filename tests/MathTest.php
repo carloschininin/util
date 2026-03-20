@@ -19,6 +19,7 @@ class MathTest extends TestCase
         $this->assertSame(10.56, Math::round(10.555));
         $this->assertSame(10.55, Math::round(10.554));
         $this->assertSame(10.6, Math::round(10.555, 1));
+        $this->assertSame(16.304, Math::round(16.3040000000000000, 3));
     }
 
     public function testRoundMath(): void
