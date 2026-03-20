@@ -28,7 +28,7 @@ function validatePassword(?string $plainPassword): string
         throw new \InvalidArgumentException('The password can not be empty.');
     }
 
-    if (mb_strlen(trim($plainPassword)) < 6) {
+    if (mb_strlen(mb_trim($plainPassword)) < 6) {
         throw new \InvalidArgumentException('The password must be at least 6 characters long.');
     }
 

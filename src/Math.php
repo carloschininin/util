@@ -67,14 +67,14 @@ class Math
 
     private static function hasBcroundNative(): bool
     {
-        return version_compare(PHP_VERSION, self::PHP_VERSION_BCROUND, '>=')
-            && extension_loaded('bcmath')
-            && function_exists('bcround');
+        return version_compare(\PHP_VERSION, self::PHP_VERSION_BCROUND, '>=')
+            && \extension_loaded('bcmath')
+            && \function_exists('bcround');
     }
 
     private static function hasBcmath(): bool
     {
-        return extension_loaded('bcmath')
-            && function_exists('bcpow');
+        return \extension_loaded('bcmath')
+            && \function_exists('bcpow');
     }
 }

@@ -19,7 +19,7 @@ abstract class Assert extends WebmozartAssert
 
         if (false === $date) {
             static::reportInvalidArgument(
-                sprintf(
+                \sprintf(
                     '' === $message ? 'Date time string "%s" should be like "%s"' : $message,
                     $value,
                     $format

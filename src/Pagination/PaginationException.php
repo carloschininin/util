@@ -13,6 +13,6 @@ class PaginationException extends \RuntimeException
 {
     public function __construct($message = 'Pagination')
     {
-        parent::__construct(sprintf('Error: <%s>', $message));
+        parent::__construct(\sprintf('Error: <%s>', $message));
     }
 }

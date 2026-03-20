@@ -18,7 +18,7 @@ class ValueSearch
 
     public function __construct(?string $searchText = null)
     {
-        $this->searchText = $searchText ? trim($searchText) : null;
+        $this->searchText = $searchText ? mb_trim($searchText) : null;
     }
 
     public function searchText(): ?string

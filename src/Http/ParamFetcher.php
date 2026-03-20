@@ -147,8 +147,8 @@ final class ParamFetcher
 
     private function assertRequired(string $key): void
     {
-        Assert::keyExists($this->data, $key, sprintf('"%s" not found', $key));
-        Assert::notNull($this->data[$key], sprintf('"%s" should be not null', $key));
+        Assert::keyExists($this->data, $key, \sprintf('"%s" not found', $key));
+        Assert::notNull($this->data[$key], \sprintf('"%s" should be not null', $key));
     }
 
     private function assertType(string $key, string $type, ?string $format = null): void
@@ -158,10 +158,10 @@ final class ParamFetcher
         }
 
         match ($type) {
-            self::TYPE_STRING => Assert::string($this->data[$key], sprintf('"%s" should be a string. Got %%s', $key)),
-            self::TYPE_INT => Assert::numeric($this->data[$key], sprintf('"%s" should be an integer. Got %%s', $key)),
-            self::TYPE_BOOL => Assert::boolean($this->data[$key], sprintf('"%s" should be a boolean. Got %%s', $key)),
-            self::TYPE_DATE => Assert::dateTimeString($this->data[$key], $format ?? Helper::DATE_FORMAT, sprintf('"%s" should be a valid format "%s" date', $key, $format ?? Helper::DATE_FORMAT)),
+            self::TYPE_STRING => Assert::string($this->data[$key], \sprintf('"%s" should be a string. Got %%s', $key)),
+            self::TYPE_INT => Assert::numeric($this->data[$key], \sprintf('"%s" should be an integer. Got %%s', $key)),
+            self::TYPE_BOOL => Assert::boolean($this->data[$key], \sprintf('"%s" should be a boolean. Got %%s', $key)),
+            self::TYPE_DATE => Assert::dateTimeString($this->data[$key], $format ?? Helper::DATE_FORMAT, \sprintf('"%s" should be a valid format "%s" date', $key, $format ?? Helper::DATE_FORMAT)),
         };
     }
 

@@ -12,6 +12,7 @@ namespace CarlosChininin\Util\File;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\String\ByteString;
 use ZipArchive;
+
 use function Symfony\Component\String\u;
 
 final class FileZipDownload extends FileDownload
